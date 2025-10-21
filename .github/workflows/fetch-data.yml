@@ -1,16 +1,24 @@
 name: Fetch NBA Data
+
 on:
   schedule:
-    - cron: "*/30 * * * *"
-  workflow_dispatch:
+    - cron: "0 12 * * *"   # Runs at 7 AM EST (12:00 UTC)
+  workflow_dispatch:        # Keeps manual trigger enabled
 
 jobs:
   fetch:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Set up job
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - run: pip install -r requirements.txt
-      - run: python broker/data_broker.py
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run data broker
+        run: python broker/data_broker.py
